@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
 {
-    public Action NeedToDestroy;
     [SerializeField] private GameObject _object;
     [SerializeField] private int _count;
 
@@ -15,31 +14,22 @@ public class Spawner : MonoBehaviour
 
     void Update()
     {
-        SpawnObject(_count);
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnObject(_count);
+       
 
-        var pingPong = Mathf.PingPong(3f, 6f);
-        Debug.Log(pingPong);
-
-
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown((KeyCode.R)))
         {
-            foreach (var cube in _cubeList)
-            {
-                NeedToDestroy.Invoke();
-            }
+            foreach (var cube in _cubeList) Destroy(cube);
         }
     }
 
     private void SpawnObject(int count)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        for (int i = 1; i < count; i++)
         {
-            for (int i = 0; i < count - 1; i++)
-            {
-                var cube = Instantiate(_object);
-                cube.transform.position = new Vector3(Random.Range(-5f, 5f), 10f, Random.Range(-5f, 5f));
-                _cubeList.Add(cube);
-            }
+            var cube = Instantiate(_object);
+            cube.transform.position = new Vector3(Random.Range(-5f, 5f), 10f, Random.Range(-5f, 5f));
+            _cubeList.Add(cube);
         }
     }
 }
